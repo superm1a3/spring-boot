@@ -52,9 +52,9 @@ public class PropertySourcesPropertyValues implements PropertyValues {
 
 	private final PropertyNamePatternsMatcher includes;
 
-	private final Map<String, PropertyValue> propertyValues = new LinkedHashMap<String, PropertyValue>();
+	private final Map<String, PropertyValue> propertyValues = new LinkedHashMap<>();
 
-	private final ConcurrentHashMap<String, PropertySource<?>> collectionOwners = new ConcurrentHashMap<String, PropertySource<?>>();
+	private final ConcurrentHashMap<String, PropertySource<?>> collectionOwners = new ConcurrentHashMap<>();
 
 	private final boolean resolvePlaceholders;
 
@@ -70,8 +70,7 @@ public class PropertySourcesPropertyValues implements PropertyValues {
 	 * Create a new PropertyValues from the given PropertySources that will optionally
 	 * resolve placeholders.
 	 * @param propertySources a PropertySources instance
-	 * @param resolvePlaceholders {@code true} if placeholders should be resolved,
-	 * otherwise {@code false}
+	 * @param resolvePlaceholders {@code true} if placeholders should be resolved.
 	 * @since 1.5.2
 	 */
 	public PropertySourcesPropertyValues(PropertySources propertySources,

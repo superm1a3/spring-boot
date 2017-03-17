@@ -29,6 +29,8 @@ import org.springframework.boot.autoconfigure.condition.SpringBootCondition;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerConfiguration.ResourceServerCondition;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
@@ -107,13 +109,21 @@ public class OAuth2ResourceServerConfiguration {
 	}
 
 	private static final class ResourceServerFilterChainOrderProcessor
-			implements BeanPostProcessor {
+			implements BeanPostProcessor, ApplicationContextAware {
 
 		private final ResourceServerProperties properties;
+
+		private ApplicationContext context;
 
 		private ResourceServerFilterChainOrderProcessor(
 				ResourceServerProperties properties) {
 			this.properties = properties;
+		}
+
+		@Override
+		public void setApplicationContext(ApplicationContext context)
+				throws BeansException {
+			this.context = context;
 		}
 
 		@Override
@@ -126,8 +136,11 @@ public class OAuth2ResourceServerConfiguration {
 		public Object postProcessAfterInitialization(Object bean, String beanName)
 				throws BeansException {
 			if (bean instanceof ResourceServerConfiguration) {
-				ResourceServerConfiguration config = (ResourceServerConfiguration) bean;
-				config.setOrder(this.properties.getFilterOrder());
+				if (this.context.getBeanNamesForType(ResourceServerConfiguration.class,
+						false, false).length == 1) {
+					ResourceServerConfiguration config = (ResourceServerConfiguration) bean;
+					config.setOrder(this.properties.getFilterOrder());
+				}
 			}
 			return bean;
 		}
@@ -161,9 +174,17 @@ public class OAuth2ResourceServerConfiguration {
 				return ConditionOutcome
 						.match(message.foundExactly("JWT resource configuration"));
 			}
+			if (!resolver.getSubProperties("jwk").isEmpty()) {
+				return ConditionOutcome
+						.match(message.foundExactly("JWK resource configuration"));
+			}
 			if (StringUtils.hasText(resolver.getProperty("user-info-uri"))) {
 				return ConditionOutcome
 						.match(message.foundExactly("user-info-uri property"));
+			}
+			if (StringUtils.hasText(resolver.getProperty("token-info-uri"))) {
+				return ConditionOutcome
+						.match(message.foundExactly("token-info-uri property"));
 			}
 			if (ClassUtils.isPresent(AUTHORIZATION_ANNOTATION, null)) {
 				if (AuthorizationServerEndpointsConfigurationBeanCondition

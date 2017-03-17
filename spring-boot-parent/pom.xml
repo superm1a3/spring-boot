@@ -18,7 +18,7 @@
 		<url>http://www.spring.io</url>
 	</organization>
 	<properties>
-		<main.basedir>..</main.basedir>
+		<main.basedir>${basedir}/..</main.basedir>
 		<disable.checks>false</disable.checks>
 		<java.version>1.8</java.version>
 		<aether.version>1.0.2.v20150114</aether.version>
@@ -68,11 +68,6 @@
 				<groupId>com.vaadin.external.google</groupId>
 				<artifactId>android-json</artifactId>
 				<version>0.0.20131108.vaadin1</version>
-			</dependency>
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-all</artifactId>
-				<version>4.0.38.Final</version>
 			</dependency>
 			<dependency>
 				<groupId>io.spring.gradle</groupId>
@@ -240,6 +235,11 @@
 				<version>${gradle.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.gradle</groupId>
+				<artifactId>gradle-process-services</artifactId>
+				<version>${gradle.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.jetbrains.kotlin</groupId>
 				<artifactId>kotlin-runtime</artifactId>
 				<version>1.0.4</version>
@@ -301,7 +301,7 @@
 						<dependency>
 							<groupId>com.puppycrawl.tools</groupId>
 							<artifactId>checkstyle</artifactId>
-							<version>7.1.1</version>
+							<version>7.6</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -502,7 +502,7 @@
 							<configLocation>src/checkstyle/checkstyle.xml</configLocation>
 							<suppressionsLocation>src/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
 							<headerLocation>src/checkstyle/checkstyle-header.txt</headerLocation>
-							<propertyExpansion>checkstyle.build.directory=${project.build.directory}</propertyExpansion>
+							<propertyExpansion>main.basedir=${main.basedir}</propertyExpansion>
 							<encoding>UTF-8</encoding>
 							<consoleOutput>true</consoleOutput>
 							<failsOnError>true</failsOnError>

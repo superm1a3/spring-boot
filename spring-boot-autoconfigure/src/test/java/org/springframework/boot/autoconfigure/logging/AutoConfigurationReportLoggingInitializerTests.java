@@ -34,8 +34,8 @@ import org.mockito.stubbing.Answer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionEvaluationReport;
 import org.springframework.boot.autoconfigure.context.PropertyPlaceholderAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.HttpMessageConvertersAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
+import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -60,15 +60,15 @@ import static org.mockito.Mockito.mock;
  */
 public class AutoConfigurationReportLoggingInitializerTests {
 
-	private static ThreadLocal<Log> logThreadLocal = new ThreadLocal<Log>();
+	private static ThreadLocal<Log> logThreadLocal = new ThreadLocal<>();
 
 	private Log log;
 
 	private AutoConfigurationReportLoggingInitializer initializer;
 
-	protected List<String> debugLog = new ArrayList<String>();
+	protected List<String> debugLog = new ArrayList<>();
 
-	protected List<String> infoLog = new ArrayList<String>();
+	protected List<String> infoLog = new ArrayList<>();
 
 	@Before
 	public void setup() {
@@ -171,8 +171,8 @@ public class AutoConfigurationReportLoggingInitializerTests {
 		}
 		// Just basic sanity check, test is for visual inspection
 		String l = this.debugLog.get(0);
-		assertThat(l).contains(
-				"not a servlet web application (OnWebApplicationCondition)");
+		assertThat(l)
+				.contains("not a servlet web application (OnWebApplicationCondition)");
 	}
 
 	@Test

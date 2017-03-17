@@ -2048,7 +2048,7 @@ your application defines, if any.
 NOTE: By default, batch applications require a `DataSource` to store job details. If you
 want to deviate from that, you'll need to implement `BatchConfigurer`, see
 {spring-batch-javadoc}/core/configuration/annotation/EnableBatchProcessing.html[The
-Javadoc of @EnableBatchProcessing] for more details.
+Javadoc of `@EnableBatchProcessing`] for more details.
 
 
 
@@ -2471,7 +2471,7 @@ https://plugins.gradle.org/plugin/com.gorylenko.gradle-git-properties[`gradle-gi
 [source,groovy,indent=0]
 ----
 	plugins {
-		id "com.gorylenko.gradle-git-properties" version "1.4.6"
+		id "com.gorylenko.gradle-git-properties" version "1.4.17"
 	}
 ----
 
@@ -2967,9 +2967,9 @@ replacing those elements from the `web.xml` as follows:
   container as if it was a `<servlet/>` and `<servlet-mapping/>` in `web.xml`.
 * A `@Bean` of type `Filter` or `FilterRegistrationBean` behaves similarly (like a
   `<filter/>` and `<filter-mapping/>`.
-* An `ApplicationContext` in an XML file can be added to an `@Import` in your
-  `Application`. Or simple cases where annotation configuration is heavily used already
-  can be recreated in a few lines as `@Bean` definitions.
+* An `ApplicationContext` in an XML file can be added through an `@ImportResource` in
+  your `Application`. Or simple cases where annotation configuration is heavily used
+  already can be recreated in a few lines as `@Bean` definitions.
 
 Once the war is working we make it executable by adding a `main` method to our
 `Application`, e.g.

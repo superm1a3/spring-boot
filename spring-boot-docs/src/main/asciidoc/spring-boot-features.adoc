@@ -565,8 +565,8 @@ specified by the `spring.profiles.active` property are added after those configu
 the `SpringApplication` API and therefore take precedence.
 
 NOTE: If you have specified any files in `spring.config.location`, profile-specific
-variants of those files will not be considered. Use directories in`spring.config.location`
-if you also want to also use profile-specific properties.
+variants of those files will not be considered. Use directories in
+`spring.config.location` if you also want to also use profile-specific properties.
 
 
 
@@ -2727,7 +2727,8 @@ to the home page at "/" and keep the default for everything else:
 If the Actuator is also in use, you will find:
 
 * The management endpoints are secure even if the application endpoints are insecure.
-* Security events are transformed into `AuditEvents` and published to the `AuditService`.
+* Security events are transformed into `AuditEvent` instances and published to the
+`AuditEventRepository`.
 * The default user will have the `ACTUATOR` role as well as the `USER` role.
 
 The Actuator security features can be modified using external properties
@@ -3980,6 +3981,10 @@ If there is a `schema.ldif` file on your classpath it will be used to initialize
 server. You can also use the `spring.ldap.embedded.ldif` property if you want to load
 the initialization script from a different resource.
 
+By default, a standard schema will be used to validate `LDIF` files, you can turn off
+validation altogether using the `spring.ldap.embedded.validation.enabled` property. If
+you have custom attributes, you can use `spring.ldap.embedded.validation.schema` to define
+your custom attribute types or object classes.
 
 
 [[boot-features-caching]]
@@ -4112,6 +4117,10 @@ NOTE: Since a cache library may offer both a native implementation and JSR-107 s
 Spring Boot will prefer the JSR-107 support so that the same features are available if
 you switch to a different JSR-107 implementation.
 
+TIP: Spring Boot has a <<boot-features-hazelcast,general support for Hazelcast>>. If
+a single `HazelcastInstance` is available, it is automatically reused for the
+`CacheManager` as well unless the `spring.cache.jcache.config` property is specified.
+
 There are several ways to customize the underlying `javax.cache.cacheManager`:
 
 * Caches can be created on startup via the `spring.cache.cache-names` property. If a
@@ -4146,18 +4155,6 @@ the cache manager. An alternate configuration file can be provided as well using
 Spring Boot has a <<boot-features-hazelcast,general support for Hazelcast>>. If
 a `HazelcastInstance` has been auto-configured, it is automatically wrapped in a
 `CacheManager`.
-
-If for some reason you need a different `HazelcastInstance` for caching, you can
-request Spring Boot to create a separate one that will be only used by the
-`CacheManager`:
-
-[source,properties,indent=0]
-----
-	spring.cache.hazelcast.config=classpath:config/my-cache-hazelcast.xml
-----
-
-TIP: If a separate `HazelcastInstance` is created that way, it is not registered
-in the application context.
 
 
 
@@ -4335,6 +4332,16 @@ ActiveMQ configuration is controlled by external configuration properties in
 	spring.activemq.broker-url=tcp://192.168.1.210:9876
 	spring.activemq.user=admin
 	spring.activemq.password=secret
+----
+
+You can also pool JMS resources by adding a dependency to
+`org.apache.activemq:activemq-pool` and configure the `PooledConnectionFactory`
+accordingly:
+
+[source,properties,indent=0]
+----
+	spring.activemq.pool.enabled=true
+	spring.activemq.pool.max-connections=50
 ----
 
 See

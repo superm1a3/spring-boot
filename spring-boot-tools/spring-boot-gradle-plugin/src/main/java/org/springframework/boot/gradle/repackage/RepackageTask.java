@@ -144,8 +144,8 @@ public class RepackageTask extends DefaultTask {
 		SpringBootPluginExtension extension = project.getExtensions()
 				.getByType(SpringBootPluginExtension.class);
 		ProjectLibraries libraries = new ProjectLibraries(project, extension,
-				(this.excludeDevtools != null && this.excludeDevtools)
-						|| extension.isExcludeDevtools());
+				this.excludeDevtools == null ? extension.isExcludeDevtools()
+						: this.excludeDevtools);
 		if (extension.getProvidedConfiguration() != null) {
 			libraries.setProvidedConfigurationName(extension.getProvidedConfiguration());
 		}
@@ -193,7 +193,7 @@ public class RepackageTask extends DefaultTask {
 		private boolean isTaskMatch(Jar task, Object withJarTask) {
 			if (withJarTask == null) {
 				if ("".equals(task.getClassifier())) {
-					Set<Object> tasksWithCustomRepackaging = new HashSet<Object>();
+					Set<Object> tasksWithCustomRepackaging = new HashSet<>();
 					for (RepackageTask repackageTask : RepackageTask.this.getProject()
 							.getTasks().withType(RepackageTask.class)) {
 						if (repackageTask.getWithJarTask() != null) {
